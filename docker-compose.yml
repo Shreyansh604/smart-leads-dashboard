@@ -1,0 +1,41 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: leads_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - leads_network
+
+  backend:
+    build: ./backend
+    container_name: leads_backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+    networks:
+      - leads_network
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/leads_db
+
+  frontend:
+    build: ./frontend
+    container_name: leads_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - leads_network
+
+networks:
+  leads_network:
+    driver: bridge
+
+volumes:
+  mongo_data:
