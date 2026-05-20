@@ -199,6 +199,24 @@ VITE_API_URL=
 
 ## API Documentation
 
+### Postman Collection
+
+A ready-to-use Postman collection is included in the repository: `SmartLeads_postman_collection.json`
+
+**How to use:**
+1. Open Postman → click **Import** → select `SmartLeads_postman_collection.json`
+2. Run requests in this order:
+   - `Register Admin` → creates the admin account
+   - `Register Sales User` → creates the sales account
+   - `Login Admin` → **automatically saves** the admin token
+   - `Login Sales User` → **automatically saves** the sales token
+   - `Create Lead 1` → **automatically saves** the lead ID
+3. All other requests (filters, update, delete, export) will work automatically after that
+
+> Tokens and lead IDs are auto-populated via Postman test scripts — no manual copy-pasting needed.
+
+---
+
 ### Base URL
 ```
 http://localhost:5000/api
@@ -413,6 +431,19 @@ Response: CSV file download
 | Edit Lead      | ✅    | ✅    |
 | Delete Lead    | ✅    | ❌    |
 | Export CSV     | ✅    | ❌    |
+
+---
+
+## Scalability Notes
+
+This project is structured to scale cleanly as usage grows:
+
+- **Microservices-ready** — Auth and Leads are separate concerns and can be split into independent services behind an API gateway (e.g. Nginx or Kong)
+- **Horizontal scaling** — Docker containers can be replicated and load-balanced using Docker Swarm or Kubernetes
+- **Caching** — Redis can be added to cache frequently accessed lead listings and reduce database load
+- **Database scaling** — MongoDB supports sharding and replica sets for high availability
+- **Logging** — Winston or Morgan can be integrated for structured request/error logging
+- **Rate limiting** — Express middleware (e.g. `express-rate-limit`) can be added per route to prevent abuse
 
 ---
 

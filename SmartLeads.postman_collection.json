@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "Smart Leads Dashboard",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "admin_token",
+      "value": ""
+    },
+    {
+      "key": "sales_token",
+      "value": ""
+    },
+    {
+      "key": "lead_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/register" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Admin\",\n  \"email\": \"admin@test.com\",\n  \"password\": \"123456\",\n  \"role\": \"admin\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Register Sales User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/register" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sales User\",\n  \"email\": \"sales@test.com\",\n  \"password\": \"123456\",\n  \"role\": \"sales\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) pm.collectionVariables.set('admin_token', res.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login Sales User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) pm.collectionVariables.set('sales_token', res.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sales@test.com\",\n  \"password\": \"123456\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Leads",
+      "item": [
+        {
+          "name": "Create Lead 1 - Rahul Website New",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data._id) pm.collectionVariables.set('lead_id', res.data._id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"status\": \"New\",\n  \"source\": \"Website\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Lead 2 - Priya Instagram Contacted",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Priya Singh\",\n  \"email\": \"priya@example.com\",\n  \"status\": \"Contacted\",\n  \"source\": \"Instagram\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Lead 3 - Amit Referral Qualified",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amit Kumar\",\n  \"email\": \"amit@example.com\",\n  \"status\": \"Qualified\",\n  \"source\": \"Referral\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Lead 4 - Neha Website Lost",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Neha Verma\",\n  \"email\": \"neha@example.com\",\n  \"status\": \"Lost\",\n  \"source\": \"Website\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Create Lead 5 - Rahul Instagram Qualified",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Rahul Gupta\",\n  \"email\": \"rahulg@example.com\",\n  \"status\": \"Qualified\",\n  \"source\": \"Instagram\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Leads",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads" }
+          }
+        },
+        {
+          "name": "Get Single Lead",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads/{{lead_id}}" }
+          }
+        },
+        {
+          "name": "Filter - Status New",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?status=New" }
+          }
+        },
+        {
+          "name": "Filter - Status Qualified",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?status=Qualified" }
+          }
+        },
+        {
+          "name": "Filter - Source Instagram",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?source=Instagram" }
+          }
+        },
+        {
+          "name": "Filter - Search by Name Rahul",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?search=Rahul" }
+          }
+        },
+        {
+          "name": "Filter - Search by Email",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?search=amit@example.com" }
+          }
+        },
+        {
+          "name": "Filter - Multiple Filters",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?status=Qualified&source=Instagram&search=Rahul" }
+          }
+        },
+        {
+          "name": "Filter - Sort Oldest",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?sort=oldest" }
+          }
+        },
+        {
+          "name": "Filter - Sort Latest",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?sort=latest" }
+          }
+        },
+        {
+          "name": "Filter - Pagination Page 1",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?page=1&limit=2" }
+          }
+        },
+        {
+          "name": "Filter - Pagination Page 2",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads?page=2&limit=2" }
+          }
+        },
+        {
+          "name": "Update Lead",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "{{admin_token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/api/leads/{{lead_id}}" },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Contacted\",\n  \"source\": \"Referral\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Lead - Admin (should work)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads/{{lead_id}}" }
+          }
+        },
+        {
+          "name": "Delete Lead - Sales (should fail 403)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "{{sales_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads/{{lead_id}}" }
+          }
+        },
+        {
+          "name": "Export CSV - Admin (should work)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads/export" }
+          }
+        },
+        {
+          "name": "Export CSV - Sales (should fail 403)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "{{sales_token}}" }],
+            "url": { "raw": "{{base_url}}/api/leads/export" }
+          }
+        }
+      ]
+    }
+  ]
+}
